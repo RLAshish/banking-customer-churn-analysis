@@ -30,14 +30,14 @@ jobs:
         run: python src/analyze.py
       - name: Check generated outputs
         run: |
-          test -n "$(find outputs -maxdepth 1 -type f ! -name '.gitkeep' -print -quit)"
-          ls -lh outputs/
-      - name: Publish generated outputs to repository
+          test -n "$(find outputs -maxdepth 1 -name '*.xlsx' -print -quit)"
+          ls -lh outputs/*.xlsx
+      - name: Publish Excel report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f outputs/
+          git add -f outputs/*.xlsx
           if ! git diff --cached --quiet; then
-            git commit -m "Publish validated analysis outputs"
+            git commit -m "Publish validated Excel analysis report"
             git push
           fi

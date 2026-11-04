@@ -1,0 +1,34 @@
+# Banking Customer Churn Analysis
+
+An end-to-end customer retention analysis of a public bank-customer churn sample using Python, SQL, Excel and Power BI.
+
+## Business questions
+- What proportion of customers exited the bank?
+- How does churn vary by age group, geography, tenure and product holdings?
+- Are inactive customers more likely to exit?
+- What customer balances and estimated salaries are associated with exited customers?
+- Which customer segments should a retention team investigate first?
+
+## Dataset and attribution
+Microsoft Learn's [customer churn tutorial](https://learn.microsoft.com/en-us/fabric/data-science/customer-churn) uses a public sample of 10,000 bank customers and documents the `Exited` target. The sample CSV is downloaded from Microsoft's tutorial data endpoint: https://synapseaisolutionsa.z13.web.core.windows.net/data/bankcustomerchurn/churn.csv. This is demonstration data, not real customer records from an operating bank.
+
+## Run locally
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python src/analyze.py
+```
+The script downloads the sample CSV to `data/` and generates cleaned data and an Excel workbook in `outputs/`.
+
+## Repository structure
+- `src/analyze.py` — download, validate, clean, segment and export.
+- `sql/analysis.sql` — business analysis queries.
+- `powerbi/README.md` — model, DAX measures and dashboard layout.
+- `data/` and `outputs/` — local generated files; excluded from Git.
+
+## Metric definitions
+Churn rate = exited customers / total customers. The source target `Exited = 1` indicates that a customer exited. Identifiers and surname are retained in the raw download but excluded from grouped analysis. Churn rates are descriptive associations, not causal effects or individual-level predictions.
+
+## Limitations
+This is a synthetic/demo portfolio dataset with limited context and no event dates. It should not be represented as real bank performance. Segment differences can guide further investigation, but do not prove why a customer left.

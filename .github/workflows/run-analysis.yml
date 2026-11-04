@@ -1,0 +1,43 @@
+name: Run analysis and publish outputs
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "outputs/**"
+      - "README.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run analysis
+        run: python src/analyze.py
+      - name: Check generated outputs
+        run: |
+          test -n "$(find outputs -maxdepth 1 -type f ! -name '.gitkeep' -print -quit)"
+          ls -lh outputs/
+      - name: Publish generated outputs to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f outputs/
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish validated analysis outputs"
+            git push
+          fi

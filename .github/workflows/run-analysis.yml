@@ -39,5 +39,6 @@ jobs:
           git add -f outputs/*.xlsx
           if ! git diff --cached --quiet; then
             git commit -m "Publish validated Excel analysis report"
+            git pull --rebase origin main
             git push
           fi
